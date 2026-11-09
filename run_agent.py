@@ -1,6 +1,32 @@
 from src.agent.graph import build_graph
+from src.tools.document import parse_document
 
 agent = build_graph()
+
+print("===== 個人文件載入 =====")
+
+file_path = input(
+    "輸入 PDF / DOCX 路徑（直接 Enter 略過）："
+).strip().strip('"')
+
+document_chunks = []
+
+if file_path:
+    result = parse_document(file_path)
+
+    if result["ok"]:
+        document_chunks = result["data"]["chunks"]
+
+        print(
+            f"文件解析成功，取得 "
+            f"{len(document_chunks)} 個片段"
+        )
+    else:
+        print(
+            "文件解析失敗：",
+            result["message"]
+        )
+        print("本次將使用原本的文字背景。")
 
 # 初始化面試
 state = {
@@ -17,6 +43,9 @@ state = {
 
     "topic_index": 0,
     "topic": "",
+    "document_chunks": document_chunks,
+    "retrieved_context": [],
+    "tool_log": [],
     "question": "",
     "latest_answer": "",
 
