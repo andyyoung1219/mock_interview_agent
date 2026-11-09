@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <title>Adaptive Interview Agent</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/script.js" defer></script>
+</head>
+<body>
+
+  <main class="container">
+
+    <header>
+      <h1>Adaptive Interview Agent</h1>
+      <p>智慧模擬面試系統</p>
+    </header>
+
+    <section class="panel" id="setup-panel">
+      <h2>建立模擬面試</h2>
+
+      <form id="start-form">
+        <label for="interview-type">面試類型</label>
+        <select id="interview-type">
+          <option value="graduate">研究所推甄</option>
+          <option value="job">企業求職</option>
+        </select>
+
+        <label for="difficulty">面試難度</label>
+        <select id="difficulty">
+          <option value="easy">簡單</option>
+          <option value="medium" selected>中等</option>
+          <option value="hard">困難</option>
+        </select>
+
+       
+        <label for="background">個人背景（選填）</label>
+
+        <textarea
+            id="background"
+            rows="5"
+            placeholder="可輸入專題、履歷或個人經歷；若上傳文件也可以留白"
+        ></textarea>
+
+        <label for="resume-file">上傳個人文件（選填）</label>
+
+        <input
+            type="file"
+            id="resume-file"
+            accept=".pdf,.docx"
+        />
+
+        <p class="helper">
+            支援 PDF / DOCX，最大 10 MB。
+            可只填寫背景、只上傳文件，或兩者都提供。
+            文件擷取內容將用於 Gemini 面試提問。
+        </p>
+
+        <p id="file-feedback" class="helper"></p>
+
+
+        <button id="start-btn" type="submit">
+          開始面試
+        </button>
+      </form>
+    </section>
+
+    <section class="panel hidden" id="chat-panel">
+      <div class="chat-header">
+        <h2>模擬面試</h2>
+        <span id="topic">目前主題</span>
+      </div>
+
+      <div id="messages" class="messages"></div>
+
+      <form id="answer-form">
+        <textarea id="answer" rows="3"
+          placeholder="輸入你的回答..."
+          required></textarea>
+
+        <button id="send-btn" type="submit">
+          提交回答
+        </button>
+      </form>
+
+      <p id="status"></p>
+    </section>
+
+  </main>
+
+</body>
+</html>
