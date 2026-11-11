@@ -20,8 +20,13 @@ from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
 from src.agent.graph import build_graph
+from src.agent.summary import generate_summary
 from src.tools.document import parse_document
 
+from src.storage.sqlite_store import (
+    SQLiteStore,
+    SessionConflict,
+)
 
 app = FastAPI(title="Adaptive Interview Agent")
 
@@ -36,8 +41,8 @@ app.mount(
 
 agent = build_graph()
 
-# 開發階段使用記憶體保存 Session
-sessions = {}
+# SQLite 持久化儲存
+store = SQLiteStore()
 
 
 class StartRequest(BaseModel):
@@ -216,7 +221,18 @@ async def start_interview(
 
     # ===== 6. 成功後保存 Session =====
 
-    sessions[session_id] = result
+    try:
+        await run_in_threadpool(
+            store.create_session,
+            session_id,
+            result
+        )
+    except Exception:
+        logging.exception("面試 Session 儲存失敗")
+        raise HTTPException(
+            status_code=500,
+            detail="面試已生成，但資料儲存失敗，請重新建立面試"
+        )
 
     # ===== 7. 回傳給前端 =====
 
@@ -252,7 +268,12 @@ async def start_interview(
 
 @app.post("/api/answer")
 async def answer_interview(request: AnswerRequest):
-    state = sessions.get(request.session_id)
+    stored = await run_in_threadpool(
+        store.load_session,
+        request.session_id
+    )
+
+    state = stored["state"] if stored else None
 
     if state is None:
         raise HTTPException(
@@ -289,7 +310,26 @@ async def answer_interview(request: AnswerRequest):
         )
 
     # 只有成功才更新 State
-    sessions[request.session_id] = result
+    try:
+        await run_in_threadpool(
+            store.update_session,
+            request.session_id,
+            result,
+            stored["version"]
+        )
+
+    except SessionConflict:
+        raise HTTPException(
+            status_code=409,
+            detail="面試已有新的進度，請重新載入"
+        )
+
+    except Exception:
+        logging.exception("面試進度儲存失敗")
+        raise HTTPException(
+            status_code=500,
+            detail="資料庫儲存失敗，請重新載入確認進度"
+        )
 
     return {
         "status": result["status"],
@@ -298,3 +338,135 @@ async def answer_interview(request: AnswerRequest):
         "decision": result["decision"],
         "reason": result["decision_reason"]
     }
+
+@app.get("/api/sessions")
+async def list_interviews():
+    return await run_in_threadpool(
+        store.list_sessions
+    )
+
+
+@app.get("/api/sessions/{session_id}")
+async def get_interview(session_id: str):
+    stored = await run_in_threadpool(
+        store.load_session,
+        session_id
+    )
+
+    if stored is None:
+        raise HTTPException(
+            status_code=404,
+            detail="找不到面試 Session"
+        )
+
+    state = stored["state"]
+
+    turns = await run_in_threadpool(
+        store.get_turns,
+        session_id
+    )
+
+    return {
+        "session_id": session_id,
+        "status": state["status"],
+        "topic": state["topic"],
+        "question": state["question"],
+        "decision": state["decision"],
+        "turns": turns,
+        "version": stored["version"],
+    }
+
+
+@app.delete("/api/sessions/{session_id}")
+async def delete_interview(session_id: str):
+    deleted = await run_in_threadpool(
+        store.delete_session,
+        session_id
+    )
+
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="找不到面試 Session"
+        )
+
+    return {"message": "面試紀錄已刪除"}
+
+
+@app.get("/api/sessions/{session_id}/summary")
+async def get_interview_summary(session_id: str):
+    stored = await run_in_threadpool(
+        store.load_session, session_id
+    )
+
+    if stored is None:
+        raise HTTPException(
+            status_code=404,
+            detail="找不到面試 Session"
+        )
+
+    if stored["state"]["status"] != "finished":
+        raise HTTPException(
+            status_code=409,
+            detail="面試尚未完成"
+        )
+
+    summary = await run_in_threadpool(
+        store.get_summary, session_id
+    )
+
+    return {"summary": summary}
+
+
+@app.post("/api/sessions/{session_id}/summary")
+async def create_interview_summary(session_id: str):
+    stored = await run_in_threadpool(
+        store.load_session, session_id
+    )
+
+    if stored is None:
+        raise HTTPException(
+            status_code=404,
+            detail="找不到面試 Session"
+        )
+
+    if stored["state"]["status"] != "finished":
+        raise HTTPException(
+            status_code=409,
+            detail="面試尚未完成"
+        )
+
+    # 已有摘要就直接回傳，不重複呼叫 Gemini
+    existing = await run_in_threadpool(
+        store.get_summary, session_id
+    )
+
+    if existing is not None:
+        return {"summary": existing}
+
+    try:
+        summary = await run_in_threadpool(
+            generate_summary,
+            stored["state"]
+        )
+    except Exception:
+        logging.exception("面試摘要生成失敗")
+        raise HTTPException(
+            status_code=502,
+            detail="摘要生成失敗，面試紀錄已保留，可稍後重試"
+        )
+
+    try:
+        saved = await run_in_threadpool(
+            store.save_summary,
+            session_id,
+            summary
+        )
+    except Exception:
+        logging.exception("面試摘要儲存失敗")
+        raise HTTPException(
+            status_code=500,
+            detail="摘要儲存失敗，請重新嘗試"
+        )
+
+    return {"summary": saved}

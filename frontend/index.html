@@ -1,26 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Adaptive Interview Agent</title>
   <link rel="stylesheet" href="/static/style.css">
   <script src="/static/script.js" defer></script>
 </head>
 <body>
-
   <main class="container">
-
-    <header>
-      <h1>Adaptive Interview Agent</h1>
-      <p>智慧模擬面試系統</p>
-    </header>
+  <header>
+    <h1>Adaptive Interview Agent</h1>
+    <p>智慧模擬面試系統</p>
+  </header>
 
     <section class="panel" id="setup-panel">
       <h2>建立模擬面試</h2>
-
       <form id="start-form">
         <label for="interview-type">面試類型</label>
         <select id="interview-type">
@@ -35,60 +30,59 @@
           <option value="hard">困難</option>
         </select>
 
-       
         <label for="background">個人背景（選填）</label>
-
-        <textarea
-            id="background"
-            rows="5"
-            placeholder="可輸入專題、履歷或個人經歷；若上傳文件也可以留白"
-        ></textarea>
+        <textarea id="background" rows="5"
+                  placeholder="可輸入專題、履歷或個人經歷；若上傳文件也可以留白"></textarea>
 
         <label for="resume-file">上傳個人文件（選填）</label>
-
-        <input
-            type="file"
-            id="resume-file"
-            accept=".pdf,.docx"
-        />
-
+        <input type="file" id="resume-file" accept=".pdf,.docx" />
         <p class="helper">
-            支援 PDF / DOCX，最大 10 MB。
-            可只填寫背景、只上傳文件，或兩者都提供。
-            文件擷取內容將用於 Gemini 面試提問。
+          支援 PDF / DOCX，最大 10 MB。可只填寫背景、只上傳文件，或兩者都提供。
+          文件擷取內容將用於 Gemini 面試提問。
         </p>
-
         <p id="file-feedback" class="helper"></p>
-
-
-        <button id="start-btn" type="submit">
-          開始面試
-        </button>
+        <button id="start-btn" type="submit">開始面試</button>
       </form>
-    </section>
 
+      <section id="history-panel" class="history-panel" aria-labelledby="history-title">
+        <div class="history-header">
+          <h2 id="history-title">歷史面試</h2>
+          <button type="button" id="refresh-history-btn" class="secondary-btn">重新整理</button>
+        </div>
+        <p id="history-status" class="helper" aria-live="polite">正在載入歷史紀錄...</p>
+        <div id="history-list" class="history-list"></div>
+      </section>
+    </section>
     <section class="panel hidden" id="chat-panel">
       <div class="chat-header">
         <h2>模擬面試</h2>
         <span id="topic">目前主題</span>
       </div>
+      <div class="chat-actions">
+        <button type="button" id="reload-session-btn" class="secondary-btn">重新載入進度</button>
+        <button type="button" id="new-interview-btn" class="secondary-btn">返回面試清單 / 新面試</button>
+      </div>
 
-      <div id="messages" class="messages"></div>
-
+      <div id="messages" class="messages" aria-live="polite"></div>
       <form id="answer-form">
-        <textarea id="answer" rows="3"
-          placeholder="輸入你的回答..."
-          required></textarea>
-
-        <button id="send-btn" type="submit">
-          提交回答
-        </button>
+        <textarea id="answer" rows="3" placeholder="輸入你的回答..." required></textarea>
+        <button id="send-btn" type="submit">提交回答</button>
       </form>
+      <p id="status" role="status"></p>
+      <section id="summary-panel" class="summary-panel hidden">
+        <h2>面試回饋報告</h2>
 
-      <p id="status"></p>
+        <div id="summary-content"></div>
+
+        <button
+          id="generate-summary-btn"
+          type="button"
+          class="secondary-btn hidden"
+        >
+          產生 / 重新嘗試摘要
+        </button>
+      </section>
     </section>
-
   </main>
-
 </body>
 </html>

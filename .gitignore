@@ -22,3 +22,20 @@ documents/
 
 # Temporary files
 *.log
+
+# Editor / OS temporary files
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test outputs
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# SQLite runtime / journal files
+*.db-*
+*.sqlite-*
+*.sqlite3-*
