@@ -71,6 +71,18 @@ class SQLiteStore:
                 )
             """)
             conn.execute("""
+                CREATE TABLE IF NOT EXISTS submissions (
+                    session_id TEXT NOT NULL,
+                    submission_id TEXT NOT NULL,
+                    response_json TEXT NOT NULL,
+                    PRIMARY KEY (session_id, submission_id),
+                    FOREIGN KEY (session_id)
+                        REFERENCES sessions(session_id)
+                        ON DELETE CASCADE
+                )
+            """)
+
+            conn.execute("""
                 CREATE INDEX IF NOT EXISTS idx_sessions_updated_at
                 ON sessions(updated_at)
             """)
@@ -121,8 +133,13 @@ class SQLiteStore:
         return result
 
     def update_session(
-        self, session_id: str, state: dict, expected_version: int
-    ) -> int:
+            self,
+            session_id: str,
+            state: dict,
+            expected_version: int,
+            submission_id: str | None = None,
+            response: dict | None = None,
+        ) -> int:
         """原子更新 State + 所有已回答回合；版本不符時拒絕覆寫。"""
         turns = state.get("answer_history", [])
         now = self._now()
@@ -167,6 +184,16 @@ class SQLiteStore:
                 )
                 for i, turn in enumerate(turns, start=1)
             ])
+            if submission_id is not None and response is not None:
+                conn.execute("""
+                    INSERT INTO submissions (
+                        session_id, submission_id, response_json
+                    ) VALUES (?, ?, ?)
+                """, (
+                    session_id,
+                    submission_id,
+                    self._serialize(response)
+                ))
         return expected_version + 1
 
     def list_sessions(self) -> list[dict]:
@@ -229,5 +256,18 @@ class SQLiteStore:
                 raise ValueError("面試尚未完成，無法儲存摘要")
 
             return json.loads(row["summary_json"])
+
+    def get_submission_response(self, session_id: str, submission_id: str) -> dict | None:
+        with self._connect() as conn:
+            row = conn.execute("""
+                SELECT response_json
+                FROM submissions
+                WHERE session_id = ? AND submission_id = ?
+            """, (session_id, submission_id)).fetchone()
+
+        if row is None:
+            return None
+
+        return json.loads(row["response_json"])
 
     

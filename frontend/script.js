@@ -1,5 +1,6 @@
 let sessionId = null;
 let busy = false;
+let pendingSubmission = null;
 
 // 只在本機瀏覽器記錄最後使用的 Session ID；完整資料仍以 SQLite 為準。
 const LAST_SESSION_KEY = "interview_last_session_id";
@@ -318,6 +319,7 @@ async function loadSession(id) {
         // 等資料成功取得後才變更目前會話，避免載入失敗使原本進度消失。
         sessionId = id;
         rememberLastSession(id);
+        pendingSubmission = null;
         messages.replaceChildren();
         summaryPanel.classList.add("hidden");
         summaryContent.replaceChildren();
@@ -395,6 +397,7 @@ startForm.addEventListener("submit", async event => {
         const result = await postAPI("/api/start", formData);
         sessionId = result.session_id;
         rememberLastSession(sessionId);
+        pendingSubmission = null;
         messages.replaceChildren();
         answerInput.value = "";
         answerForm.classList.remove("hidden");
@@ -424,7 +427,25 @@ answerForm.addEventListener("submit", async event => {
     setBusy(true);
     statusText.textContent = "AI 面試官正在分析回答...";
     try {
-        const result = await postAPI("/api/answer", { session_id: sessionId, answer });
+        if (
+            !pendingSubmission ||
+            pendingSubmission.sessionId !== sessionId ||
+            pendingSubmission.answer !== answer
+        ) {
+            pendingSubmission = {
+                sessionId,
+                answer,
+                id: crypto.randomUUID()
+            };
+        }
+
+        const result = await postAPI("/api/answer", {
+            session_id: sessionId,
+            answer,
+            submission_id: pendingSubmission.id
+        });
+
+        pendingSubmission = null;
         addMessage(answer, "user");
         answerInput.value = "";
         if (result.status === "finished") {
@@ -466,6 +487,7 @@ newInterviewBtn?.addEventListener("click", () => {
 
     sessionId = null;
     rememberLastSession(null);
+    pendingSubmission = null;
     messages.replaceChildren();
     summaryPanel.classList.add("hidden");
 

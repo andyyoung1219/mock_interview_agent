@@ -55,12 +55,23 @@ class StartRequest(BaseModel):
 class AnswerRequest(BaseModel):
     session_id: str
     answer: str = Field(min_length=1, max_length=10000)
+    submission_id: str | None = Field(
+        default=None,
+        min_length=8,
+        max_length=80
+    )
 
 
 @app.get("/")
 def home():
     return FileResponse(FRONTEND_DIR / "index.html")
 
+@app.get("/api/health")
+def health():
+    return {
+        "ok": True,
+        "service": "adaptive-interview-agent"
+    }
 
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 
@@ -281,6 +292,15 @@ async def answer_interview(request: AnswerRequest):
             detail="找不到面試 Session"
         )
 
+    if request.submission_id:
+        previous = await run_in_threadpool(
+            store.get_submission_response,
+            request.session_id,
+            request.submission_id
+        )
+    if previous is not None:
+        return previous
+
     if state["status"] == "finished":
         raise HTTPException(
             status_code=400,
@@ -309,16 +329,35 @@ async def answer_interview(request: AnswerRequest):
             detail="Agent 處理失敗，原本面試進度已保留"
         )
 
-    # 只有成功才更新 State
+    response_body = {
+        "status": result["status"],
+        "topic": result["topic"],
+        "question": result["question"],
+        "decision": result["decision"],
+        "reason": result["decision_reason"]
+    }
+
     try:
         await run_in_threadpool(
             store.update_session,
             request.session_id,
             result,
-            stored["version"]
+            stored["version"],
+            request.submission_id,
+            response_body
         )
 
     except SessionConflict:
+        # 如果同一個請求已由另一個並行請求完成，直接回傳結果
+        if request.submission_id:
+            previous = await run_in_threadpool(
+                store.get_submission_response,
+                request.session_id,
+                request.submission_id
+            )
+            if previous is not None:
+                return previous
+
         raise HTTPException(
             status_code=409,
             detail="面試已有新的進度，請重新載入"
@@ -331,13 +370,7 @@ async def answer_interview(request: AnswerRequest):
             detail="資料庫儲存失敗，請重新載入確認進度"
         )
 
-    return {
-        "status": result["status"],
-        "topic": result["topic"],
-        "question": result["question"],
-        "decision": result["decision"],
-        "reason": result["decision_reason"]
-    }
+    return response_body
 
 @app.get("/api/sessions")
 async def list_interviews():
