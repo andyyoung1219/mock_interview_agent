@@ -34,6 +34,7 @@ Thumbs.db
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+agent_test/
 
 # SQLite runtime / journal files
 *.db-*
