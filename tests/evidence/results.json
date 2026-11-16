@@ -1,0 +1,170 @@
+{
+  "executed_at": "2026-11-16T14:54:21.489617+08:00",
+  "mode": "OFFLINE_GEMINI_MOCK",
+  "python": "3.13.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "fastapi": "0.162.0",
+    "langgraph": "1.2.19",
+    "google-genai": "2.34.0",
+    "pydantic": "2.14.2",
+    "pymupdf": "2.0",
+    "python-docx": "1.2.0",
+    "httpx": "0.28.1"
+  },
+  "tests_run": 31,
+  "passed": 29,
+  "expected_failures": 1,
+  "failures": 0,
+  "errors": 1,
+  "unexpected_successes": 0,
+  "legacy_import_assertions": "test_document.py and test_retrieval.py execute additional assertions at discovery; not included in unittest count",
+  "source_unchanged": true,
+  "source_sha256": {
+    "server.py": "66e49c3a7171190604f5d7107f93b7cd00252da6743df3f766f5287f414acc7f",
+    "run_agent.py": "b4dc98c1d9b33f13304a18c8e0b21484c4c5c3264ad17ceffef099ebb8c48746",
+    "app.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Containerfile": "657b52ba8d2f8c489c8e0dbcc82c45800ca4bc61811a84a77d500d1b6263fdcb",
+    "requirements.txt": "6c3a56f321df058621f4f850924b95a0f06e4aeaf286d5fc70c43a8d0f9bc0a4",
+    "src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/agent/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/agent/graph.py": "ca61d78ae4ab34f1d9bfb12c07c184eaa0cf75496dcf3f3a9e25939138ddab53",
+    "src/agent/summary.py": "7cc4e72988d39a9f74d669d2e8502c2b6bbb12af6e8975d23d0fde6749106ef6",
+    "src/storage/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/storage/sqlite_store.py": "5f70f488c68bca7e735f213a2714aac60eed690642ce95b93b56bc5d236bf800",
+    "src/tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/tools/document.py": "ff199424890eb720ad52cdc27ab70f698f04354919db1cb35c7871b99ccd8818",
+    "src/tools/retrieval.py": "579741be6ea002adfb3e155f8666fe2b1d1dfc3ae62b584a946d0afdc79b9e66",
+    "frontend/index.html": "f003c40d6a217ef7801091fe8e4fa635a77800ab7cee2f10cac2077e29499ff6",
+    "frontend/script.js": "0406ba097d405086c3d9916c6e9667be9b823002d66f770a14d10d321f3c2a84",
+    "frontend/style.css": "1d7b8be67cca16a371a8468c3d7584e9e8a9b4a00cadea311bf8a1addba388a7"
+  },
+  "records": [
+    {
+      "test": "test_hw2.TestAgentDecision.test_finish",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_hw2.TestAgentDecision.test_followup",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_hw2.TestAgentDecision.test_followup_limit",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_hw2.TestDocument.test_unsupported_file",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_hw2.TestSQLite.test_create_and_reload",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_hw2.TestSQLite.test_summary_persistence",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_hw2.TestSQLite.test_update_and_submission",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_hw2.TestSQLite.test_version_conflict",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_sqlite_store.SQLiteStoreTest.test_create_reload_update_delete",
+      "outcome": "ERROR",
+      "detail": "Traceback (most recent call last):\n  File \"C:\\Users\\TKU\\VS code\\mock_interview_agent\\tests\\test_sqlite_store.py\", line 44, in test_create_reload_update_delete\n    self.assertTrue(reloaded_store.delete_session(\"test-123\"))\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'SQLiteStore' object has no attribute 'delete_session'. Did you mean: 'create_session'?\n"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_corrupted_pdf",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_docx_and_pdf_parse",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_file_size_limit",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_missing_api_key",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_missing_file",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_pdf_page_limit",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_pdf_without_text",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_retrieval_bad_inputs",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_retrieval_ranking_and_no_match",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.ToolEvidence.test_summary_unverified_quote_is_marked",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_answer_failure_preserves_state",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_blank_answer_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_complete_document_interview_and_summary",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_duplicate_submission_does_not_advance",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_empty_background_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_invalid_llm_json_preserves_state",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_missing_session_returns_404",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_no_document_path",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_optional_submission_id_should_be_accepted",
+      "outcome": "EXPECTED_FAILURE",
+      "detail": "Traceback (most recent call last):\n  File \"C:\\Users\\TKU\\VS code\\mock_interview_agent\\agent_test\\test_hw2_evidence.py\", line 203, in test_optional_submission_id_should_be_accepted\n    self.assertEqual(r.status_code, 200, error)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 500 != 200 : UnboundLocalError: cannot access local variable 'previous' where it is not associated with a value\n"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_summary_failure_preserves_finished_state",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_unsupported_upload_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "__main__.WorkflowEvidence.test_version_conflict_returns_409",
+      "outcome": "PASS"
+    }
+  ]
+}

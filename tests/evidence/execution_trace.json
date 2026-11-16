@@ -1,0 +1,450 @@
+{
+  "mode": "OFFLINE_MOCKED_GEMINI_REAL_API_GRAPH_TOOLS_SQLITE",
+  "user_input": {
+    "interview_type": "graduate",
+    "difficulty": "medium",
+    "max_topics": 2,
+    "background": "資訊工程學生，專題以 RT-DETR 偵測海浪。",
+    "file": "test_resume.docx"
+  },
+  "start_response": {
+    "session_id": "fded56cb-b126-4a7c-9b53-02e04f4204eb",
+    "status": "active",
+    "topic": "專題技術原理",
+    "question": "為什麼選用 RT-DETR 進行海浪偵測？",
+    "document": {
+      "filename": "test_resume.docx",
+      "chunk_count": 2
+    },
+    "retrieval": {
+      "match_count": 1,
+      "sources": [
+        {
+          "doc_id": "test_resume.docx",
+          "source": "paragraph 1"
+        }
+      ]
+    }
+  },
+  "turns": [
+    {
+      "user_input": "因為 Transformer。",
+      "response": {
+        "status": "active",
+        "topic": "專題技術原理",
+        "question": "請說明 RT-DETR 與其他模型的比較基準。",
+        "decision": "FOLLOW_UP",
+        "reason": "仍需補充比較依據"
+      }
+    },
+    {
+      "user_input": "我還沒有完成比較。",
+      "response": {
+        "status": "active",
+        "topic": "實驗設計與驗證",
+        "question": "如何設計測試集並驗證海浪偵測效果？",
+        "decision": "NEXT_TOPIC",
+        "reason": "仍需補充比較依據"
+      }
+    },
+    {
+      "user_input": "以不同影片分割資料，使用精確率與延遲比較模型。",
+      "response": {
+        "status": "finished",
+        "topic": "實驗設計與驗證",
+        "question": "",
+        "decision": "FINISH",
+        "reason": "已交代驗證方式"
+      }
+    }
+  ],
+  "state_snapshots": [
+    {
+      "stage": "start",
+      "state": {
+        "interview_type": "graduate",
+        "difficulty": "medium",
+        "background": "資訊工程學生，專題以 RT-DETR 偵測海浪。",
+        "topic_index": 0,
+        "topic": "專題技術原理",
+        "question": "為什麼選用 RT-DETR 進行海浪偵測？",
+        "latest_answer": "",
+        "question_history": [
+          "為什麼選用 RT-DETR 進行海浪偵測？"
+        ],
+        "answer_history": [],
+        "followup_count": 0,
+        "max_followups": 1,
+        "max_topics": 2,
+        "suggestion": "",
+        "decision": "INITIAL",
+        "decision_reason": "",
+        "missing_point": "",
+        "status": "active",
+        "document_chunks": [
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 1",
+            "part": 1,
+            "text": "專題使用 RT-DETR 進行海浪偵測，BoT-SORT 追蹤海浪。"
+          },
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 2",
+            "part": 1,
+            "text": "實驗設計以影片分割訓練集與測試集，比較精確率與延遲。"
+          }
+        ],
+        "retrieved_context": [
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 1",
+            "part": 1,
+            "text": "專題使用 RT-DETR 進行海浪偵測，BoT-SORT 追蹤海浪。",
+            "score": 6
+          }
+        ],
+        "tool_log": [
+          {
+            "tool": "retrieve_context",
+            "topic": "專題技術原理",
+            "ok": true,
+            "error_code": null,
+            "match_count": 1,
+            "sources": [
+              "test_resume.docx:paragraph 1"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "answer_1",
+      "state": {
+        "interview_type": "graduate",
+        "difficulty": "medium",
+        "background": "資訊工程學生，專題以 RT-DETR 偵測海浪。",
+        "topic_index": 0,
+        "topic": "專題技術原理",
+        "question": "請說明 RT-DETR 與其他模型的比較基準。",
+        "latest_answer": "",
+        "question_history": [
+          "為什麼選用 RT-DETR 進行海浪偵測？",
+          "請說明 RT-DETR 與其他模型的比較基準。"
+        ],
+        "answer_history": [
+          {
+            "topic": "專題技術原理",
+            "question": "為什麼選用 RT-DETR 進行海浪偵測？",
+            "answer": "因為 Transformer。",
+            "decision": "FOLLOW_UP",
+            "reason": "仍需補充比較依據"
+          }
+        ],
+        "followup_count": 1,
+        "max_followups": 1,
+        "max_topics": 2,
+        "suggestion": "FOLLOW_UP",
+        "decision": "FOLLOW_UP",
+        "decision_reason": "仍需補充比較依據",
+        "missing_point": "比較基準與指標",
+        "status": "active",
+        "document_chunks": [
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 1",
+            "part": 1,
+            "text": "專題使用 RT-DETR 進行海浪偵測，BoT-SORT 追蹤海浪。"
+          },
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 2",
+            "part": 1,
+            "text": "實驗設計以影片分割訓練集與測試集，比較精確率與延遲。"
+          }
+        ],
+        "retrieved_context": [
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 1",
+            "part": 1,
+            "text": "專題使用 RT-DETR 進行海浪偵測，BoT-SORT 追蹤海浪。",
+            "score": 9
+          },
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 2",
+            "part": 1,
+            "text": "實驗設計以影片分割訓練集與測試集，比較精確率與延遲。",
+            "score": 1
+          }
+        ],
+        "tool_log": [
+          {
+            "tool": "retrieve_context",
+            "topic": "專題技術原理",
+            "ok": true,
+            "error_code": null,
+            "match_count": 1,
+            "sources": [
+              "test_resume.docx:paragraph 1"
+            ]
+          },
+          {
+            "tool": "retrieve_context",
+            "topic": "專題技術原理",
+            "ok": true,
+            "error_code": null,
+            "match_count": 2,
+            "sources": [
+              "test_resume.docx:paragraph 1",
+              "test_resume.docx:paragraph 2"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "answer_2",
+      "state": {
+        "interview_type": "graduate",
+        "difficulty": "medium",
+        "background": "資訊工程學生，專題以 RT-DETR 偵測海浪。",
+        "topic_index": 1,
+        "topic": "實驗設計與驗證",
+        "question": "如何設計測試集並驗證海浪偵測效果？",
+        "latest_answer": "",
+        "question_history": [
+          "為什麼選用 RT-DETR 進行海浪偵測？",
+          "請說明 RT-DETR 與其他模型的比較基準。",
+          "如何設計測試集並驗證海浪偵測效果？"
+        ],
+        "answer_history": [
+          {
+            "topic": "專題技術原理",
+            "question": "為什麼選用 RT-DETR 進行海浪偵測？",
+            "answer": "因為 Transformer。",
+            "decision": "FOLLOW_UP",
+            "reason": "仍需補充比較依據"
+          },
+          {
+            "topic": "專題技術原理",
+            "question": "請說明 RT-DETR 與其他模型的比較基準。",
+            "answer": "我還沒有完成比較。",
+            "decision": "NEXT_TOPIC",
+            "reason": "仍需補充比較依據"
+          }
+        ],
+        "followup_count": 0,
+        "max_followups": 1,
+        "max_topics": 2,
+        "suggestion": "FOLLOW_UP",
+        "decision": "NEXT_TOPIC",
+        "decision_reason": "仍需補充比較依據",
+        "missing_point": "比較基準與指標",
+        "status": "active",
+        "document_chunks": [
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 1",
+            "part": 1,
+            "text": "專題使用 RT-DETR 進行海浪偵測，BoT-SORT 追蹤海浪。"
+          },
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 2",
+            "part": 1,
+            "text": "實驗設計以影片分割訓練集與測試集，比較精確率與延遲。"
+          }
+        ],
+        "retrieved_context": [
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 1",
+            "part": 1,
+            "text": "專題使用 RT-DETR 進行海浪偵測，BoT-SORT 追蹤海浪。",
+            "score": 6
+          },
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 2",
+            "part": 1,
+            "text": "實驗設計以影片分割訓練集與測試集，比較精確率與延遲。",
+            "score": 3
+          }
+        ],
+        "tool_log": [
+          {
+            "tool": "retrieve_context",
+            "topic": "專題技術原理",
+            "ok": true,
+            "error_code": null,
+            "match_count": 1,
+            "sources": [
+              "test_resume.docx:paragraph 1"
+            ]
+          },
+          {
+            "tool": "retrieve_context",
+            "topic": "專題技術原理",
+            "ok": true,
+            "error_code": null,
+            "match_count": 2,
+            "sources": [
+              "test_resume.docx:paragraph 1",
+              "test_resume.docx:paragraph 2"
+            ]
+          },
+          {
+            "tool": "retrieve_context",
+            "topic": "實驗設計與驗證",
+            "ok": true,
+            "error_code": null,
+            "match_count": 2,
+            "sources": [
+              "test_resume.docx:paragraph 1",
+              "test_resume.docx:paragraph 2"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "answer_3",
+      "state": {
+        "interview_type": "graduate",
+        "difficulty": "medium",
+        "background": "資訊工程學生，專題以 RT-DETR 偵測海浪。",
+        "topic_index": 1,
+        "topic": "實驗設計與驗證",
+        "question": "",
+        "latest_answer": "",
+        "question_history": [
+          "為什麼選用 RT-DETR 進行海浪偵測？",
+          "請說明 RT-DETR 與其他模型的比較基準。",
+          "如何設計測試集並驗證海浪偵測效果？"
+        ],
+        "answer_history": [
+          {
+            "topic": "專題技術原理",
+            "question": "為什麼選用 RT-DETR 進行海浪偵測？",
+            "answer": "因為 Transformer。",
+            "decision": "FOLLOW_UP",
+            "reason": "仍需補充比較依據"
+          },
+          {
+            "topic": "專題技術原理",
+            "question": "請說明 RT-DETR 與其他模型的比較基準。",
+            "answer": "我還沒有完成比較。",
+            "decision": "NEXT_TOPIC",
+            "reason": "仍需補充比較依據"
+          },
+          {
+            "topic": "實驗設計與驗證",
+            "question": "如何設計測試集並驗證海浪偵測效果？",
+            "answer": "以不同影片分割資料，使用精確率與延遲比較模型。",
+            "decision": "FINISH",
+            "reason": "已交代驗證方式"
+          }
+        ],
+        "followup_count": 0,
+        "max_followups": 1,
+        "max_topics": 2,
+        "suggestion": "NEXT_TOPIC",
+        "decision": "FINISH",
+        "decision_reason": "已交代驗證方式",
+        "missing_point": "",
+        "status": "finished",
+        "document_chunks": [
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 1",
+            "part": 1,
+            "text": "專題使用 RT-DETR 進行海浪偵測，BoT-SORT 追蹤海浪。"
+          },
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 2",
+            "part": 1,
+            "text": "實驗設計以影片分割訓練集與測試集，比較精確率與延遲。"
+          }
+        ],
+        "retrieved_context": [
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 1",
+            "part": 1,
+            "text": "專題使用 RT-DETR 進行海浪偵測，BoT-SORT 追蹤海浪。",
+            "score": 6
+          },
+          {
+            "doc_id": "test_resume.docx",
+            "source": "paragraph 2",
+            "part": 1,
+            "text": "實驗設計以影片分割訓練集與測試集，比較精確率與延遲。",
+            "score": 3
+          }
+        ],
+        "tool_log": [
+          {
+            "tool": "retrieve_context",
+            "topic": "專題技術原理",
+            "ok": true,
+            "error_code": null,
+            "match_count": 1,
+            "sources": [
+              "test_resume.docx:paragraph 1"
+            ]
+          },
+          {
+            "tool": "retrieve_context",
+            "topic": "專題技術原理",
+            "ok": true,
+            "error_code": null,
+            "match_count": 2,
+            "sources": [
+              "test_resume.docx:paragraph 1",
+              "test_resume.docx:paragraph 2"
+            ]
+          },
+          {
+            "tool": "retrieve_context",
+            "topic": "實驗設計與驗證",
+            "ok": true,
+            "error_code": null,
+            "match_count": 2,
+            "sources": [
+              "test_resume.docx:paragraph 1",
+              "test_resume.docx:paragraph 2"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "summary": {
+      "overview": "回答提出模型與驗證指標，但選型比較仍待補充。",
+      "strengths": [
+        {
+          "turn_no": 3,
+          "point": "交代評估方式",
+          "evidence": "使用精確率與延遲比較模型"
+        }
+      ],
+      "improvements": [
+        {
+          "turn_no": 2,
+          "point": "補充比較實驗",
+          "evidence": "我還沒有完成比較"
+        }
+      ],
+      "suggestions": [
+        "以相同資料集比較模型的精確率與延遲。"
+      ]
+    }
+  },
+  "reloaded_version": 4,
+  "gemini_mock_calls": 6,
+  "summary_mock_calls": 1
+}

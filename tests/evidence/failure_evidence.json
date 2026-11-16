@@ -1,0 +1,37 @@
+{
+  "corrupted_pdf": {
+    "ok": false,
+    "data": null,
+    "error_code": "PARSE_FAILED",
+    "message": "文件解析失敗：FileDataError"
+  },
+  "pdf_without_text": {
+    "ok": false,
+    "data": null,
+    "error_code": "NO_TEXT",
+    "message": "文件沒有可讀取的文字，掃描 PDF 可能需要 OCR"
+  },
+  "gemini_failure": {
+    "injected": true,
+    "http": 502,
+    "body": {
+      "detail": "Agent 處理失敗，原本面試進度已保留"
+    },
+    "version_before": 1,
+    "version_after": 1
+  },
+  "omitted_submission_id": {
+    "http": 500,
+    "body": "Internal Server Error",
+    "exception": "UnboundLocalError: cannot access local variable 'previous' where it is not associated with a value",
+    "version_after": 1,
+    "expected_http": 200,
+    "status": "KNOWN_UNFIXED_DEFECT"
+  },
+  "unsupported_upload": {
+    "http": 415,
+    "body": {
+      "detail": "僅支援 PDF / DOCX 文件"
+    }
+  }
+}
